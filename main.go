@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 )
 
 func main() {
@@ -18,5 +19,16 @@ func main() {
 }
 
 func run() {
-	fmt.Printf("Funning %v as PID %d\n", os.Args[2:], os.Getpid())
+	fmt.Printf("Running %v as PID %d\n", os.Args[2:], os.Getpid())
+
+	cmd := exec.Command(os.Args[2], os.Args[3:]...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("Error : ", err)
+		os.Exit(1)
+	}
 }
